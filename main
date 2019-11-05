@@ -1,0 +1,97 @@
+module main
+import IO;
+import Set;
+import List;
+import Map;
+import lang::java::m3::Core;
+import lang::java::m3::AST;
+import lang::java::jdt::m3::Core;
+import lang::java::jdt::m3::AST;
+import util::Resources;
+set[loc] getProjects(loc project) {
+    return projects();
+}
+//Resource getProjectResource(loc project) {
+//  return getProject(project);
+//}
+//
+//list[loc] getProjectFiles(Resource project) {
+//  list[loc] projectLocation = [];
+//  for (/file(l) := project) {
+//      projectLocation += l;
+//  }
+//  return projectLocation;
+//}
+int countFileLines(loc file) {
+    return size(readFileLines(file));
+}
+int countCommentLines(loc file) {
+    int n = 0;
+    for(s <- readFileLines(file)) {
+        if(/((\s|\/*)(\/\*|\s\*)|[^\w,\;]\s\/*\/)/ := s) { 
+            n +=1;
+        }
+    }
+    return n;
+}
+int countBlankLines(loc file) {
+    int n = 0;
+    for(s <- readFileLines(file)) {
+        if(/^[ \t\r\n]*$/ := s) { 
+            n +=1;
+        }
+    }
+    return n;
+}
+//int countProjectLOCs(list[loc] projectFiles) {
+//  int totalLines = 0;
+//  int commentLines = 0;
+//  int blankLines = 0;
+//  //for (f <- projectFiles) {
+//  //  totalLines += countFileLines(f);
+//  //  commentLines += countCommentLines(f);
+//  //  blankLines += countBlankLines(f);
+//  //}
+//  M3 model = createM3FromEclipseProject(projectLocation);
+//  for (m <- model.containment, m[0].scheme == "java+compilationUnit") {
+//      asts += createAstFromFile(m[0], true);
+//  }
+    //int locs = totalLines - (commentLines + blankLines);
+    //int locs = totalLines;
+//  return locs;
+//}
+int countProjectLOCs(loc projectLocation) {
+    int totalLines = 0;
+    int commentLines = 0;
+    int blankLines = 0;
+    
+    M3 model = createM3FromEclipseProject(projectLocation);
+    for (m <- model.containment, m[0].scheme == "java+compilationUnit") {
+        totalLines += countFileLines(m[0]);
+        commentLines += countCommentLines(m[0]);
+        blankLines += countBlankLines(m[0]);
+    }
+    int locs = totalLines - (commentLines + blankLines);
+    return locs;
+}
+//int getLOCs(loc project) {
+//  //return countProjectLOCs(getProjectFiles(getProjectResource(project)));
+//  return countProjectLOCs(project);
+//}
+list[Declaration] getASTs(loc projectLocation){
+    M3 model = createM3FromEclipseProject(projectLocation);
+    list[Declaration] asts = [];
+    for (m <- model.containment, m[0].scheme == "java+compilationUnit") {
+        asts += createAstFromFile(m[0], true);
+    }
+    return asts;
+}
+//int getUnitSize(list[Declaration] asts) {
+//  visit(asts) {
+//      case Declaration d: {
+//          if (d.typ == "method") {
+//              getsize(d.src);
+//          }
+//      }   
+//  }
+//}
