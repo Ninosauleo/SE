@@ -11,26 +11,40 @@ import util::Resources;
 set[loc] getProjects(loc project) {
     return projects();
 }
-//Resource getProjectResource(loc project) {
-//  return getProject(project);
-//}
-//
-//list[loc] getProjectFiles(Resource project) {
-//  list[loc] projectLocation = [];
-//  for (/file(l) := project) {
-//      projectLocation += l;
-//  }
-//  return projectLocation;
-//}
+Resource getProjectResource(loc project) {
+    return getProject(project);
+}
+list[loc] getProjectFiles(Resource project) {
+    list[loc] projectLocation = [];
+    for (/file(l) := project) {
+        projectLocation += l;
+    }
+    return projectLocation;
+}
 int countFileLines(loc file) {
     return size(readFileLines(file));
 }
 int countCommentLines(loc file) {
     int n = 0;
+    
+    //bool comment = false;
+    
     for(s <- readFileLines(file)) {
+        //if (comment == true)
+        //  n += 1
+    
+/
+    //if (/*)
+        //  comment = true
+        //  
+        //if (*/ && comment == true)
+        //  comment = false
+        
+    
         if(/((\s|\/*)(\/\*|\s\*)|[^\w,\;]\s\/*\/)/ := s) { 
             n +=1;
         }
+        
     }
     return n;
 }
@@ -67,11 +81,13 @@ int countProjectLOCs(loc projectLocation) {
     
     M3 model = createM3FromEclipseProject(projectLocation);
     for (m <- model.containment, m[0].scheme == "java+compilationUnit") {
+        //print(m[0]);
         totalLines += countFileLines(m[0]);
         commentLines += countCommentLines(m[0]);
         blankLines += countBlankLines(m[0]);
     }
-    int locs = totalLines - (commentLines + blankLines);
+    //int locs = totalLines - (commentLines + blankLines);
+    int locs = commentLines;
     return locs;
 }
 //int getLOCs(loc project) {
@@ -86,12 +102,13 @@ list[Declaration] getASTs(loc projectLocation){
     }
     return asts;
 }
-//int getUnitSize(list[Declaration] asts) {
-//  visit(asts) {
-//      case Declaration d: {
-//          if (d.typ == "method") {
-//              getsize(d.src);
-//          }
-//      }   
-//  }
-//}
+int getUnitSize(list[Declaration] asts) {
+    visit(asts) {
+        case Declaration d: {
+            if (d.typ is \method) {
+                println(d.src);
+            }
+        }   
+    }
+    return 0;
+}
