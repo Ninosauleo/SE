@@ -27,7 +27,8 @@ int getDuplicatesFromProjectString(str projectString) {
 	int maxIndex = size(stringList) - 1;
 	int i = 0;
 	while (i < maxIndex) {
-		int j = i + 1;
+		int j = i + ((i % 6) + 1);
+		//int j = i + 7;
 		//iSlice = slice(stringList,i,6);
 		while (j < maxIndex) {
 			//jSlice = slice(stringList,j,6);
@@ -41,8 +42,12 @@ int getDuplicatesFromProjectString(str projectString) {
 				bool duplicateLine = true;
 				int duplicateSize = 0;
 				
+				int initial_j = j;
+				int initial_i = i;
+				
 				// go to beginning of duplicated block
-				while (i >= 0 && j >= 0 && stringList[i] == stringList[j]) {
+				while (i >= 0 && j >= 0 && j > initial_i && stringList[i] == stringList[j]) {
+					//println("decreasing: " + stringList[i] + " i: <i> j: <j>");
 					j -= 1;
 					i -= 1;
 				}
@@ -55,7 +60,7 @@ int getDuplicatesFromProjectString(str projectString) {
 					duplicateSize += 1;
 					i += 1;
 					j += 1;
-					if (j <= maxIndex && i <= maxIndex) {
+					if (j <= maxIndex && i <= maxIndex && i < initial_j) {
 						duplicateLine = stringList[i] == stringList[j];
 					}
 					else {
@@ -63,18 +68,20 @@ int getDuplicatesFromProjectString(str projectString) {
 					}
 				}
 				
+				//println("duplicate size: <duplicateSize> string: <stringList[i - 1]>");
+				
 				// if size of duplicate block is 6 lines or more, add them to duplicate line counter
 				if (duplicateSize >= 6) {
-					println("duplicate: " + stringList[i]);
+					println("duplicate: " + stringList[i - 1] + " i: <i> j: <j>");
 					println(duplicateSize);
 					duplicates += duplicateSize;
 				}
-				i += duplicateSize;
-				j += duplicateSize;
+				//i += duplicateSize;
+				//j += duplicateSize;
 			}
 			
 			// Can this be increased to 6?
-			j += 1;
+			j += 6;
 		}
 		
 		i += 1;
@@ -123,18 +130,6 @@ int getDuplicateSize(list[str] stringList, int i, int j) {
 	}
 	
 	return size;
-}
-
-/**
-  * Returns full project Java source text as a string.
-  */
-str getFilesAsString(loc projectLocation){
-	M3 model = createM3FromEclipseProject(projectLocation);
-	str filesString = "";
-	for (m <- model.containment, m[0].scheme == "java+compilationUnit") {
-		filesString += readFile(m[0]) + "\n";
-	}
-	return filesString;
 }
 
 int getDuplicatesFromLoc(loc projectLocation) {

@@ -24,6 +24,8 @@ int getCyclomaticComplexity(Declaration ast) {
 		case \for(_,_,_): complexity += 1;
 		case \for(_,_,_,_): complexity += 1;
 		case \catch(_,_): complexity += 1;
+		case \conditional(_,_,_): complexity += 1;
+		case \do(_,_): complexity += 1;
 	}
 	return complexity;
 }
