@@ -1,15 +1,37 @@
-module Helpers
+module software::product::properties::Helpers
 
 import List;
 import String;
 import IO;
+
+import util::Resources;
 
 import lang::java::m3::Core;
 import lang::java::m3::AST;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 
-import util::Resources;
+import software::product::properties::CyclomaticComplexity;
+import software::product::properties::UnitSize;
+import software::product::properties::Volume;
+import software::product::properties::Duplication;
+
+
+list[real] getCyclomaticComplexity(loc project) {
+	return getProjectCyclomaticComplexity(getASTs(project));
+}
+
+list[real] getUnitSize(loc project) {
+	return getProjectUnitSize(getASTs(project));
+}
+
+int getDuplicates(loc project) {
+	return getDuplicatesFromLoc(project);
+}
+
+int getLOCs(loc project) {
+	return countProjectLOCs(project);
+}
 
 
 
@@ -64,27 +86,7 @@ Resource getProjectResource(loc project) {
 	return getProject(project);
 }
 
-//str stripComments(str inputString) {
-//	bool commentBlock = false;
-//	list[str] stringList = split("\n", inputString);
-//	list[str] outputList = [];
-//	for (line <- stringList) {
-//		if (/.*\/\*.*/ := line) {
-//			commentBlock = true;
-//		}
-//		else if (commentBlock == true && (/.*\*\/.*/ := line)){
-//			commentBlock = false;
-//		}
-//		if (/.*\/\*.*\*\// := line) {
-//			commentBlock = false;
-//		}
-//	
-//		if (commentBlock == false) {
-//			outputList += [line];
-//		}
-//		
-//	}
-//}
+
 
 list[str] stripComments(str inputString) {
 	bool commentBlock = false;
@@ -131,6 +133,65 @@ str getFilesAsString(loc projectLocation){
 	}
 	return filesString;
 }
+
+/**
+  * Returns count of LOC a given file.
+  */
+int countFileLines(loc file) {
+    return size(readFileLines(file));
+}
+
+/**
+  * Counts Physical Lines of Code SLOCs (lines - comment lines - blank lines) for a given file.
+  */
+int countFileLOCs(loc file) {
+    int totalLines = countFileLines(file);
+    int commentLines = countCommentLines(file);
+    int blankLines = countBlankLines(file);
+    int locs = totalLines - (commentLines + blankLines);
+    return locs;
+}
+
+
+
+/**
+  * Counts comment lines in a given file.
+  */
+int countCommentLines(loc file) {
+    int n = 0;
+    for(s <- readFileLines(file)) {
+        if(/((\s|\/*)(\/\*|\s\*)|[^\w,\;]\s\/*\/)/ := s) { 
+            n +=1;
+        }
+    }
+    return n;
+}
+
+/**
+  * Counts blank lines in a given file.
+  */
+int countBlankLines(loc file) {
+    int n = 0;
+    for(s <- readFileLines(file)) {
+        if(/^[ \t\r\n]*$/ := s) { 
+            n +=1;
+        }
+    }
+    return n;
+}
+
+/**
+  * Counts LOCs for a given project location.
+  */
+int countProjectLOCs(loc project) {
+	list[loc] files = getProjectFiles(getProjectResource(project));
+	int count = 0;
+	for (file <- files) {
+		count += countFileLOCs(file);
+	}
+	return count;
+}
+
 
 
 

@@ -1,4 +1,4 @@
-module CyclomaticComplexity
+module software::product::properties::CyclomaticComplexity
 
 import IO;
 
@@ -7,7 +7,7 @@ import lang::java::m3::AST;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 
-import Helpers;
+import software::product::properties::Helpers;
 
 /**
   * Calculates cyclomatic complexity for a method
@@ -28,6 +28,29 @@ int getCyclomaticComplexity(Declaration ast) {
 		case \do(_,_): complexity += 1;
 	}
 	return complexity;
+}
+
+/**
+  * Returns rating (1-5) for unit complexity of project.
+  */
+int getUnitComplexityScore(loc project) {
+	list[real] complexities = getCyclomaticComplexity(project);
+	
+	if (complexities[1] <= 25.0 && complexities[2] <= 0.0 && complexities[3] <= 0.0) {
+		return 5;
+	}
+	else if (complexities[1] <= 30.0 && complexities[2] <= 5.0 && complexities[3] <= 0.0) {
+		return 4;
+	}
+	else if (complexities[1] <= 40.0 && complexities[2] <= 10.0 && complexities[3] <= 0.0) {
+		return 3;
+	}
+	else if (complexities[1] <= 50.0 && complexities[2] <= 15.0 && complexities[3] <= 5.0) {
+		return 2;
+	}
+	else {
+		return 1;
+	}
 }
 
 /**

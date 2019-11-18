@@ -1,4 +1,4 @@
-module Duplication
+module software::product::properties::Duplication
 
 import IO;
 import String;
@@ -9,7 +9,7 @@ import lang::java::m3::AST;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 
-import Helpers;
+import software::product::properties::Helpers;
 
 /* 
  * finds duplicate lines of code in a project - project should be a string
@@ -134,4 +134,33 @@ int getDuplicateSize(list[str] stringList, int i, int j) {
 
 int getDuplicatesFromLoc(loc projectLocation) {
 	return getDuplicatesFromProjectString(getFilesAsString(projectLocation));
+}
+
+
+/**
+  * Returns rating (1-5) for duplication in a project.
+  * Returns 0 if error occured.
+  */
+int getDuplicationScore(loc project) {
+	int locs = getLOCs(project);
+	int duplicatedLocs = getDuplicates(project);
+	real duplicationPercentage = duplicatedLocs / (locs * 100.0);
+	if (duplicationPercentage <= 3.0) {
+		return 5;
+	}
+	else if (duplicationPercentage <= 5.0) {
+		return 4;
+	}
+	else if (duplicationPercentage <= 10.0) {
+		return 3;
+	}
+	else if (duplicationPercentage <= 20.0) {
+		return 2;
+	}
+	else if (duplicationPercentage <= 100.0) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
 }
