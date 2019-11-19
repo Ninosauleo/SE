@@ -57,23 +57,23 @@ public str getMY(num rank) {
   * Tests
   */
 test bool testNumberOfLOCSFile0(){
-	println(countFileLines(test0));
-    return countFileLines(test0) == 3;
+	println(countLOCsOfFile(test0));
+    return countLOCsOfFile(test0) == 3;
 }
 test bool testNumberOfLOCSFile1(){
-	println(countFileLines(test1));
-    return countFileLines(test1) == 6;
+	println(countLOCsOfFile(test1));
+    return countLOCsOfFile(test1) == 6;
 }
 test bool testNumberOfLOCSFile2(){
-	println(countFileLines(test2));
-    return countFileLines(test2) == 6;
+	println(countLOCsOfFile(test2));
+    return countLOCsOfFile(test2) == 6;
 }
 
 test bool testNumberOfLOCSFile3(){
-	println(countFileLines(test3));
-    return countFileLines(test3) == 7;
+	println(countLOCsOfFile(test3));
+    return countLOCsOfFile(test3) == 7;
 }
 test bool testNumberOfLOCSFile4(){
-	println(countFileLines(test4));
-    return countFileLines(test4) == 39;
+	println(countLOCsOfFile(test4));
+    return countLOCsOfFile(test4) == 39;
 }

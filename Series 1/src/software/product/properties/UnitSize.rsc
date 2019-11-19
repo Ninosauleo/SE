@@ -14,6 +14,7 @@ import software::product::properties::Helpers;
 
 /**
   * Calculates per-category percentages of unit sizes for a project
+  * Benchmarks from Building Maintainable Software page 64
   */
 list[real] getProjectUnitSize(list[Declaration] asts) {
 	list[int] unitSizes = [0,0,0,0];

@@ -28,11 +28,6 @@ list[real] getUnitSize(loc project) {
 }
 
 
-int getDuplicates(loc project) {
-    return getDuplicatesFromLoc(project);
-}
-
-
 
 /**
   * Returns list of percentages that fall in a specific bucket.
@@ -82,50 +77,6 @@ set[loc] getProjects() {
 }
 
 
-/**
-  * Returns project as a Resource.
-  */
-Resource getProjectResource(loc project) {
-    return getProject(project);
-}
-
-
-list[str] stripComments(str inputString) {
-    bool commentBlock = false;
-    bool addLine = true;
-    list[str] stringList = split("\n", inputString);
-    list[str] outputList = [];
-    int prevC = 0;
-    int c;
-    for (line <- stringList) {
-        addLine = true;
-        for (c <- chars(line)) {
-        
-            // detect whether in comment block
-            if (prevC == 47 && c == 42) {
-                commentBlock = true;
-            }
-            if (prevC == 42 && c == 47) {
-                commentBlock = false;
-                addLine = false;
-            }
-            if (prevC == 47 && c == 47) {
-                addLine = false;
-            }
-            
-            prevC = c;
-        }
-        if (!commentBlock && addLine) {
-            outputList += line;
-        }
-    }
-    
-    //for (line <- outputList) {
-    //  println(line);
-    //}
-    
-    return outputList;
-}
 
 /**
   * Returns full project Java source text as a string.
@@ -140,45 +91,6 @@ str getFilesAsString(loc projectLocation){
 }
 
 
-int countCommentLines2(loc file) {
-    
-    bool commentBlock = false;
-    bool addLine = true;
-    list[str] stringList = split("\n", inputString);
-    list[str] outputList = [];
-    int prevC = 0;
-    int c;
-    for (line <- stringList) {
-        addLine = true;
-        for (c <- chars(line)) {
-        
-            // detect whether in comment block
-            if (prevC == 47 && c == 42) {
-                commentBlock = true;
-            }
-            if (prevC == 42 && c == 47) {
-                commentBlock = false;
-                addLine = false;
-            }
-            if (prevC == 47 && c == 47) {
-                addLine = false;
-            }
-            
-            prevC = c;
-        }
-        if (!commentBlock && addLine) {
-            outputList += line;
-        }
-    }
-    
-    //for (line <- outputList) {
-    //  println(line);
-    //}
-    
-    return outputList;
-}
-
-
 /*
 * For Duplication
 */
@@ -186,12 +98,12 @@ int countCommentLines2(loc file) {
 public list[str] linesOfFileWithoutComments(loc file) {
 	return 
 		for (line <- split("\n", filterMultiLineComments(readFile(file)))) {
-			// skip empty lines
-			if (/^[ \t]*$/ := line) {
-				continue;
-			}
 			// skip lines starting with //
 			if (/^[ \t]*\/\// := line) {
+				continue;
+			}
+			// skip empty lines
+			if (/^[ \t]*$/ := line) {
 				continue;
 			}
 			append line;
@@ -199,12 +111,15 @@ public list[str] linesOfFileWithoutComments(loc file) {
 }
 
 public list[str] linesOfFileIncludeComments(loc file) {
-	return 
-		for (line <- split("\n", readFile(file))) {
-			// skip empty lines
-		
-			append line;
-		};
+    return 
+        for (line <- split("\n", readFile(file))) {
+            // skip empty lines
+            if (/^[ \t]*$/ := line) {
+                continue;
+            }
+        
+            append line;
+        };
 }
 
 /*
@@ -231,6 +146,9 @@ public num countLOCsOfFile(loc file) {
 }
 
 
+/*
+* Both used in Volume and Duplication
+*/
 
 private str filterMultiLineComments(str fileString) {
 	// match /* to */

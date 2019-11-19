@@ -15,13 +15,6 @@ import software::product::properties::Helpers;
 
 private loc test0 = |project://Duplication/src/Duplication0.java|;
 private loc test1 = |project://Duplication2/src/Duplication1.java|;
-//private loc test0 = |project://Test/src/test/Duplication/Duplication0.java|;
-
-/*
-private loc test2 = |project://Test/src/test/Duplication/Duplication34.java|;
-*/
-
-
 
 
 num getPercentageOfDuplication(tuple[num totalLines, num dupeLines] result) {
@@ -116,11 +109,13 @@ int getDuplicationScore(loc project) {
 test bool testDuplicationFile0(){
 	tuple[num totalLines, num dupeLines] result = getDuplicationLines(test0);
 	println(result.dupeLines);
-    return result.dupeLines == 14;
+    return result.dupeLines == 12;
 }
 
 test bool testDuplicationFile1(){
 	tuple[num totalLines, num dupeLines] result = getDuplicationLines(test1);
 	println(result.dupeLines);
-    return result.dupeLines == 16;
+	// 12 for strip comments out
+    return result.dupeLines == 14;
+    // 14 for comments included
 }

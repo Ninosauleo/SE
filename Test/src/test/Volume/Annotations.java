@@ -11,40 +11,40 @@ public class Annotations {
 	}
 
 	public String getType() {
-		return "Generic animal";
+		return "Generic babaganoush";
 	}
 
 	public class BuildInAnnotation extends Annotations {
 
 		@Override
-		public void speak() { // This is a good override.
-			System.out.println("Meow.");
+		public void speak() {
+			System.out.println("ahhhhh."); //comment here
 		}
 
-		public String gettype() { // compile-time error due to mistyped name.
-			return "Cat";
+		public String gettype() { // comment hello.
+			return "dog";
 		}
-	}
+	} // hello again
 
-	// @Twizzle is an annotation to method toggle().
+	// mimimi().
 	@Twizzle
 	public void toggle() {
 	}
 
-	// Declares the annotation Twizzle.
+	// hello
 	public @interface Twizzle {
 	}
 
-	// Same as: @Edible(value = true)
+	// I want a good grade :D 
 	@Edible(true)
 	Carrot item = new Carrot();
 
 	public @interface Edible {
-		boolean value() default false;
+		boolean value() default true;
 	}
 
-	@Author(first = "Oompah", last = "Loompah")
-	Book book = new Book();
+	@Author(first = "sss", last = "aa")
+	Book german = new Book();
 
 	public @interface Author {
 		String first();
