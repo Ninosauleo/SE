@@ -1,6 +1,14 @@
 module software::product::properties::UnitInterfacing
 
 import IO;
+import String;
+import List;
+import Set;
+import Map;
+import Relation;
+import util::Math;
+import util::Benchmark;
+
 
 import lang::java::m3::Core;
 import lang::java::m3::AST;
@@ -12,10 +20,10 @@ import software::product::properties::Helpers;
 
 
 /**
-  * Returns rating (1-5) for unit complexity of project.
+  * Returns rating (1-5) for unit interfacing of project.
   */
 int getUnitInterfacingScore(loc project) {
-	list[real] complexities = getUnitInterfacingSize(project);
+	list[real] complexities = getUnitInterfacing(project);
 	
 	if (complexities[1] <= 25.0 && complexities[2] <= 0.0 && complexities[3] <= 0.0) {
 		return 5;
@@ -61,8 +69,9 @@ list[real] getUnitInterfacingSize(list[Declaration] asts) {
             unitSizes[3] += 1;
         	}
         }
-        case \method(_,_,p,_):{
-        int numberOfParameters = size(p);
+        
+        case \constructor(_,b,_,_):{
+        int numberOfParameters = size(b);
         // size(p));
         // Benchmarks taken from BuildingMaintainableSoftwareSIG page 64
         // at most two paramenters
@@ -82,27 +91,8 @@ list[real] getUnitInterfacingSize(list[Declaration] asts) {
             unitSizes[3] += 1;
         	}
         }
-        case \constructor(_,p,_,_):{
-        int numberOfParameters = size(p);
-        // size(p));
-        // Benchmarks taken from BuildingMaintainableSoftwareSIG page 64
-        // at most two paramenters
-        if (numberOfParameters <= 2) {
-                    unitSizes[0] += 1;
-        }
-        // three or more parameters
-        else if (numberOfParameters > 2 && numberOfParameters < 5) {
-                    unitSizes[1] += 1;
-        }
-        // five or more parameters
-        else if (numberOfParameters >= 5 && numberOfParameters <= 7) {
-            unitSizes[2] += 1;
-        }
-        // more than seven paramaters
-        else {
-            unitSizes[3] += 1;
-        	}
-        }
+        
+        
     }
     return getPercentages(unitSizes);
 }

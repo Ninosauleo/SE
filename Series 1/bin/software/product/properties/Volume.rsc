@@ -11,7 +11,6 @@ import lang::java::jdt::m3::AST;
 
 import software::product::properties::Helpers;
 import software::product::properties::Cleaner;
-import software::product::properties::LOCCleaner;
 
 private loc test0 = |project://Test/src/test/Volume/EmptyClass.java|;
 private loc test1 = |project://Test/src/test/Volume/NormalClass.java|;

@@ -12,6 +12,7 @@ import software::product::properties::UnitSize;
 import software::product::properties::Volume;
 import software::product::properties::Duplication2;
 import software::product::properties::Cleaner;
+import software::product::properties::UnitInterfacing;
 
 
 
