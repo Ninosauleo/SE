@@ -20,7 +20,7 @@ list[real] getProjectUnitSize(list[Declaration] asts) {
 	visit(asts) {
 		case Declaration d: {
 			if (d.typ is \method) {
-				x = countFileLOCs(d.src);
+				x = countFileLines(d.src);
 				// add unit to specific bucket
 				if (x <= 15) {
 					unitSizes[0] += 1;
@@ -43,7 +43,7 @@ list[real] getProjectUnitSize(list[Declaration] asts) {
 }
 
 /**
-  * Returns star rating (1-5) for unit size of project.
+  * Returns rating (1-5) for unit size of project.
   */
 int getUnitSizeScore(loc project) {
 	list[real] sizes = getUnitSize(project);

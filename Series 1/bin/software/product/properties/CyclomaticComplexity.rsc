@@ -76,6 +76,7 @@ list[real] getProjectCyclomaticComplexity(list[Declaration] asts) {
 					cyclomaticComplexities[3] += 1;
 				}
 			}
+			
 		}	
 	}
 	
