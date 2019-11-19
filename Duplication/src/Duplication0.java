@@ -1,4 +1,4 @@
-package test.Duplication;
+
 
 public class Duplication0 {
 	public void Dummy() {
@@ -20,6 +20,7 @@ public class Duplication0 {
 		b += c;
 		c += d;
 		d += e;
-		e += f; f += a;
+		e += f; 
+		f += a;
 	}
 }

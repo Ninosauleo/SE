@@ -12,7 +12,15 @@ import lang::java::m3::AST;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import software::product::properties::Helpers;
-//import software::product::properties::LOCCleaner;
+
+private loc test0 = |project://Duplication/src/Duplication0.java|;
+private loc test1 = |project://Duplication2/src/Duplication1.java|;
+//private loc test0 = |project://Test/src/test/Duplication/Duplication0.java|;
+
+/*
+private loc test2 = |project://Test/src/test/Duplication/Duplication34.java|;
+*/
+
 
 
 
@@ -99,4 +107,20 @@ int getDuplicationScore(loc project) {
     else {
         return 0;
     }
+}
+
+
+/**
+  * Tests
+  */
+test bool testDuplicationFile0(){
+	tuple[num totalLines, num dupeLines] result = getDuplicationLines(test0);
+	println(result.dupeLines);
+    return result.dupeLines == 14;
+}
+
+test bool testDuplicationFile1(){
+	tuple[num totalLines, num dupeLines] result = getDuplicationLines(test1);
+	println(result.dupeLines);
+    return result.dupeLines == 16;
 }

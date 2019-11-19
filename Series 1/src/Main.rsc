@@ -14,7 +14,6 @@ import software::product::properties::CyclomaticComplexity;
 import software::product::properties::Helpers;
 import software::product::properties::UnitSize;
 import software::product::properties::Volume;
-//import software::product::properties::Duplication;
 import software::product::properties::Duplication2;
 
 
@@ -148,11 +147,10 @@ void printMaintainability(loc project) {
     println(" Measurements / Metrics:");
     println("======================================");
     map[str, num] pp = getProductProperties(project);
-    
+    printDuplicates(project, pp);
     printVolume(project, pp);
     printUnitSize(project, pp);
     printUnitComplexity(project, pp);
-    //printDuplicates(project, pp);
     println();
     println("======================================");
     println(" RESULTS:");

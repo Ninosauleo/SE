@@ -10,7 +10,7 @@ import lang::java::jdt::m3::AST;
 import software::product::properties::CyclomaticComplexity;
 import software::product::properties::UnitSize;
 import software::product::properties::Volume;
-import software::product::properties::Duplication;
+import software::product::properties::Duplication2;
 import software::product::properties::Cleaner;
 
 
