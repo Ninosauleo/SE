@@ -19,7 +19,7 @@ list[real] getProjectUnitSize(list[Declaration] asts) {
 	list[int] unitSizes = [0,0,0,0];
 	visit(asts) {
 		case Declaration d: {
-			if (d.typ is \method) {
+			if (d.typ is \method || d.typ is \constructor) {
 				x = countFileLines(d.src);
 				// add unit to specific bucket
 				if (x <= 15) {

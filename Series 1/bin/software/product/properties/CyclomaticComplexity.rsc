@@ -60,7 +60,7 @@ list[real] getProjectCyclomaticComplexity(list[Declaration] asts) {
 	list[int] cyclomaticComplexities = [0,0,0,0];
 	visit(asts) {
 		case Declaration d: {
-			if (d.typ is \method) {
+			if (d.typ is \method || d.typ is \constructor) {
 				x = getCyclomaticComplexity(d);
 				// add value to specific bucket, based on method cyclom. complexity
 				if (x <= 10) {

@@ -19,6 +19,9 @@ list[real] getCyclomaticComplexity(loc project) {
     return getProjectCyclomaticComplexity(getASTs(project));
 }
 
+list[real] getUnitInterfacing(loc project) {
+    return getUnitInterfacingSize(getASTs(project));
+}
 
 list[real] getUnitSize(loc project) {
     return getProjectUnitSize(getASTs(project));
@@ -175,12 +178,41 @@ int countCommentLines2(loc file) {
     return outputList;
 }
 
+
+/*
+* For Duplication
+*/
+
+public list[str] linesOfFileWithoutComments(loc file) {
+	return 
+		for (line <- split("\n", filterMultiLineComments(readFile(file)))) {
+			// skip empty lines
+			if (/^[ \t]*$/ := line) {
+				continue;
+			}
+			// skip lines starting with //
+			if (/^[ \t]*\/\// := line) {
+				continue;
+			}
+			append line;
+		};
+}
+
+public list[str] linesOfFileIncludeComments(loc file) {
+	return 
+		for (line <- split("\n", readFile(file))) {
+			// skip empty lines
+		
+			append line;
+		};
+}
+
 /*
  * For Volume
  */
 
 public num countLOCsOfFile(loc file) {
-	num count = 0; 
+	num countLOC = 0; 
 	for (line <- split("\n", filterMultiLineComments(readFile(file)))) {
 		
 		// skip lines starting with //
@@ -192,14 +224,16 @@ public num countLOCsOfFile(loc file) {
 		if (/^[ \t]*$/ := line) {
 			continue;
 		}
-		count += 1;
+		countLOC += 1;
 	}
-	return count;
+	return countLOC;
 
 }
 
+
+
 private str filterMultiLineComments(str fileString) {
-	// match /* to */, but /* must not be between strings, like String = " /* ";
+	// match /* to */
 	for (/<commentML:(?=(?:[^"\\]*(?:\\.|"(?:[^"\\]*\\.)*[^"\\]*"))*[^"]*$)\/\*(?s).*?\*\/>/ := fileString) {
 		if (/\n/ := commentML) {
 			// if the comment contains new lines, replace it with a new line
@@ -227,9 +261,9 @@ num countProjectLOCs(loc project){
     num count = 0;
     for (m <- model.containment, m[0].scheme == "java+compilationUnit") {
        // fast but wrong
-       count += countFileLines(m[0]);
+       //count += countFileLines(m[0]);
        // correct below
-       //count += countLOCsOfFile((m[0]));
+       count += countLOCsOfFile((m[0]));
     }
     return count;
 }

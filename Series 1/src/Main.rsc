@@ -14,7 +14,8 @@ import software::product::properties::CyclomaticComplexity;
 import software::product::properties::Helpers;
 import software::product::properties::UnitSize;
 import software::product::properties::Volume;
-import software::product::properties::Duplication;
+//import software::product::properties::Duplication;
+import software::product::properties::Duplication2;
 
 
 /**
@@ -42,10 +43,10 @@ public map[str, num] getProductProperties(loc project) {
     return (
         "Volume"      : getVolumeScore(project),
         "Complexity"  : getUnitComplexityScore(project),
-        //"Duplication" : getDuplicationScore(project),
+        "Duplication" : getDuplicationScore(project),
         "UnitSize"        : getUnitSizeScore(project)
         /** "UnitTesting" : XXX **/
-        // "UnitInterfacing"  : getUnitComplexityScore(project)
+        // "UnitInterfacing"  : getUnitInterfacingScore(project)
     );
 }
 
@@ -55,10 +56,10 @@ public map[str, num] productPropertiesToQualityCharacteristics(map[str, num] pp)
         // ISO 9216 Analisability: Volume + Duplication + UnitSize + UnitTesting / 4
         // ISO 9126 Analisability: Volume + Duplication + UnitSize / 3
         // replace volume with duplication
-        "Analisability" : round((pp["Volume"] + pp["Volume"] + pp["UnitSize"]) / 3), 
+        "Analisability" : round((pp["Volume"] + pp["Duplication"] + pp["UnitSize"]) / 3), 
         
         // ISO 9126 Changeability: Complexity + Duplication / 2
-        "Changeability" : round((pp["Complexity"] + pp["Volume"]) / 2),
+        "Changeability" : round((pp["Complexity"] + pp["Duplication"]) / 2),
         
         // ISO 9126 Stability: pp[UnitTesting]
         
@@ -156,9 +157,9 @@ void printMaintainability(loc project) {
     println("======================================");
     println(" RESULTS:");
     println("======================================");
-    //map[str, num] qc = productPropertiesToQualityCharacteristics(pp);
-    //printQualityCharacteristics(qc);
+    map[str, num] qc = productPropertiesToQualityCharacteristics(pp);
+    printQualityCharacteristics(qc);
     print("Maintainability (overall): ");
-    //print(overallScoreMaintainability(qc));
+    print(numToRating(overallScoreMaintainability(qc)));
     println();
 }
